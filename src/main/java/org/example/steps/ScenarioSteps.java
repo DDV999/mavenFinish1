@@ -1,7 +1,6 @@
 package org.example.steps;
 
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
+import io.cucumber.java.en.And;
 
 public class ScenarioSteps {
     ElectronicsSteps electronicsSteps = new ElectronicsSteps();
@@ -10,53 +9,63 @@ public class ScenarioSteps {
     TVsSteps tVsSteps = new TVsSteps();
     YandexMarketSteps yandexMarketSteps = new YandexMarketSteps();
 
-    @When("^нажимается на кнопку Яндекс.Маркет$")
-    public void clickYaMarket() {
+    @And("^перейти в \"Яндекс.Маркет\"$")
+    public void clickYandexMarket() {
         mainPageSteps.stepClickButtonYandexMarket();
     }
 
-    @When("^нажимается на кнопку Телевизоры$")
-    public void clickTV() throws InterruptedException {
-        electronicsSteps.stepClickButtonTVs();
-    }
-
-    @When("^нажимается на кнопку Электроника$")
-    public void clickEl() throws InterruptedException {
+    @And("^выбрать раздел \"Электроника\"$")
+    public void clickElectronics() throws InterruptedException {
         yandexMarketSteps.stepClickButtonElectronics();
     }
 
-    @When("^нажимается на кнопку Все фильтры$")
-    public void clickAllF() throws InterruptedException {
+    @And("^выбрать раздел \"Телевизоры\"$")
+    public void clickTV() {
+        electronicsSteps.stepClickButtonTVs();
+    }
+
+    @And("^зайти в расширенный поиск. кнопка \"Все фильтры\"$")
+    public void goToAdvancedSearch() {
         tVsSteps.stepClickButtonAllFilters();
     }
 
-    @When("^поле \"(.+)\" заполняется значением \"(.+)\"$")
-    public void fillOneField(String field, String value) {
+    @And("^для поля \"(.+)\" задать параметр поиска \"(.+)\"$")
+    public void fillFieldPriceFrom(String field, String value) {
         filterAdvancedModeSteps.fillField(field, value);
     }
 
-    @When("^выбирается производитель \"(.+)\"$")
-    public void selectLabel(String field) {
-        filterAdvancedModeSteps.fillField(field);
+    @And("^выбрать производителя \"(.+)\"$")
+    public void chooseManufacturer(String field) {
+        filterAdvancedModeSteps.chooseManufacturers(field);
     }
 
-    @When("^нажимается на кнопку Показать предложения$")
-    public void showOffers() throws InterruptedException {
+    @And("^нажать кнопку Показать предложения$")
+    public void clickButtonShowOffers() {
         filterAdvancedModeSteps.stepClickButtonShowOffers();
     }
 
-    @When("^нажимается на кнопку Найти$")
-    public void findButtonClick() throws InterruptedException {
+    @And("^проверить, что элементов на странице 48$")
+    public void checkCountElements() {
+        filterAdvancedModeSteps.checkElementsCount();
+    }
+
+    @And("^запомнить первый элемент в списке$")
+    public void getFirstItemInTheList() {
+        filterAdvancedModeSteps.getTitleMessageField();
+    }
+
+    @And("^ввести запомненное значение в \"(.+)\"$")
+    public void pushValueToSearchField(String field) {
+        filterAdvancedModeSteps.addValueToSearchField(field);
+    }
+
+    @And("^нажимается на кнопку Найти$")
+    public void findButtonClick() {
         filterAdvancedModeSteps.stepClickButtonSearch();
     }
 
-    @Then("^в поле \"(.+)\" присутствует сообщение об ошибке \"(.+)\"$")
-    public void checkErrorMessageNew(String field, String errorMessage) {
-        filterAdvancedModeSteps.checkErrorMessageField(field, errorMessage);
-    }
-
-    @Then("^поле \"(.+)\" заполнено значением: \"(.+)\"$")
-    public void checkFields(String field, String errorMessage) {
-        filterAdvancedModeSteps.checkFillField(field, errorMessage);
+    @And("^проверить, что наименование товара соответствует запомненному значению.$")
+    public void checkThatTheNameOfProductMatchesStoredValue() {
+        filterAdvancedModeSteps.checkName();
     }
 }

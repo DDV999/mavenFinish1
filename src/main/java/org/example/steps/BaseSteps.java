@@ -10,7 +10,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.example.util.TestProperties;
 
-
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -19,13 +18,13 @@ public class BaseSteps {
     protected static String baseUrl;
     public static Properties properties = TestProperties.getInstance().getProperties();
 
-    public static WebDriver getDriver(){
+    public static WebDriver getDriver() {
         return driver;
     }
 
     @Before
     public static void setUp() throws Exception {
-        switch (properties.getProperty("browser")){
+        switch (properties.getProperty("browser")) {
             case "firefox":
                 System.setProperty("webdriver.gecko.driver", properties.getProperty("webdriver.gecko.driver"));
                 driver = new FirefoxDriver();
@@ -55,7 +54,6 @@ public class BaseSteps {
     public static byte[] takeScreenshot() {
         return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
     }
-
 
 }
 

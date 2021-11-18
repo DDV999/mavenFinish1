@@ -5,12 +5,12 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.example.steps.BaseSteps;
 
-public class YandexMarketPage extends BasePageObject{
+public class YandexMarketPage extends BasePageObject {
 
     @FindBy(xpath = "//span[text()='Электроника']")
     public WebElement buttonElectronics;
 
-    public YandexMarketPage(){
+    public YandexMarketPage() {
         PageFactory.initElements(BaseSteps.getDriver(), this);
     }
 }

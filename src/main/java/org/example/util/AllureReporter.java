@@ -7,6 +7,7 @@ import io.qameta.allure.cucumber4jvm.AllureCucumber4Jvm;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.example.steps.BaseSteps;
+
 import java.io.ByteArrayInputStream;
 
 public class AllureReporter extends AllureCucumber4Jvm {

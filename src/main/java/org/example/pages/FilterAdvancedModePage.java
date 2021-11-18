@@ -11,9 +11,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class FilterAdvancedModePage extends BasePageObject {
 
-    @FindBy(xpath = "//*[@data-zone-name='all-filters-page']//h1")
-    public WebElement fieldTitle;
-
     @FindBy(xpath = "//*[@id='153061']")
     public WebElement checkboxManufacturerSamsung;
 
@@ -26,9 +23,6 @@ public class FilterAdvancedModePage extends BasePageObject {
     @FindBy(xpath = "//*[@data-filter-id='glprice']//*[@data-prefix='от']/input")
     public WebElement fieldPriceFrom;
 
-    @FindBy(xpath = "//*[@data-apiary-widget-name='@MarketNode/SearchPartition']")
-    public WebElement sections;
-
     @FindBy(xpath = "//*[@itemprop='query-input']")
     public WebElement queryInput;
 
@@ -37,6 +31,9 @@ public class FilterAdvancedModePage extends BasePageObject {
 
     @FindBy(xpath = "(//h3[@data-zone-name='title'])[1]/a[@title]")
     public WebElement firstTitleInList;
+
+    @FindBy(xpath = "//*[@data-autotest-id='product-snippet']")
+    public WebElement elementInList;
 
     public FilterAdvancedModePage() {
         PageFactory.initElements(BaseSteps.getDriver(), this);
@@ -47,8 +44,17 @@ public class FilterAdvancedModePage extends BasePageObject {
             case "Цена От":
                 fillField(fieldPriceFrom, value);
                 break;
+            default:
+                throw new AssertionError("Поле '" + fieldName + "' не объявлено на странице");
+        }
+    }
+
+    public void fillField(String fieldName) {
+        switch (fieldName) {
             case "Строка поиска":
-                fillField(queryInput, value);
+                (new WebDriverWait(BaseSteps.getDriver(), 5))
+                        .until(ExpectedConditions.visibilityOf(elementInList));
+                fillField(queryInput, getFieldFirstTitle());
                 break;
             default:
                 throw new AssertionError("Поле '" + fieldName + "' не объявлено на странице");
@@ -68,16 +74,23 @@ public class FilterAdvancedModePage extends BasePageObject {
         }
     }
 
-    public void checkFieldErrorMessage(String field, String savedTitle){
-        String xpath = "(//h3[@data-zone-name='title'])[1]/a[@title]";
-        WebDriverWait wait = new WebDriverWait(BaseSteps.getDriver(),5);
-        String actualValue = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath))).getAttribute("title");
-        Assert.assertTrue(String.format("Получено значение [%s]. Ожидалось [%s]", actualValue, savedTitle),
-                actualValue.contains(savedTitle));
-    }
-
     public String getFieldFirstTitle() {
         String xpath = "(//h3[@data-zone-name='title'])[1]/a[@title]";
-        return BaseSteps.getDriver().findElement(By.xpath(xpath)).getAttribute("title");
+        (new WebDriverWait(BaseSteps.getDriver(), 8))
+                .until(ExpectedConditions.visibilityOf(firstTitleInList));
+        return BaseSteps.getDriver().findElement(By.xpath(xpath)).getAttribute("title").toUpperCase();
+    }
+
+    public void checkNameTVInSearch() {
+        String actualValue = firstTitleInList.getText().toUpperCase();
+        Assert.assertTrue(String.format("Получено значение [%s]. Ожидалось [%s]", actualValue, getFieldFirstTitle()),
+                actualValue.contains(getFieldFirstTitle()));
+    }
+
+    public void checkCountElements() {
+        (new WebDriverWait(BaseSteps.getDriver(), 2))
+                .until(ExpectedConditions.visibilityOf(elementInList));
+        int count = BaseSteps.getDriver().findElements(By.xpath("//*[@data-autotest-id='product-snippet']")).size();
+        Assert.assertEquals(48, count);
     }
 }
